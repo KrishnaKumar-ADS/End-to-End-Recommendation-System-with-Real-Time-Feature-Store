@@ -44,8 +44,9 @@ export default function MovieCard({
   const year = yearMatch ? yearMatch[1] : movie.year?.toString();
   const cleanTitle = movie.title.replace(/\s*\(\d{4}\)$/, "");
 
-  // Score bar width (score is 0–1 from LightGBM)
-  const scorePercent = Math.round(movie.score * 100);
+  // Clamp score to [0, 1] for robust 0–100 display.
+  const normalizedScore = Math.max(0, Math.min(1, Number(movie.score) || 0));
+  const scorePercent = Math.round(normalizedScore * 100);
 
   return (
     <div className={`card group cursor-pointer animate-slide-up

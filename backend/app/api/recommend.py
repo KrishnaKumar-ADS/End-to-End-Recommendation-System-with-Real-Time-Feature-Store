@@ -131,9 +131,12 @@ async def get_recommendations(
                 base_item = item_lookup.get(int(item_id))
                 if base_item is None:
                     continue
+
+                bounded_score = max(0.0, min(1.0, float(bandit_score)))
                 reranked_items.append(base_item.model_copy(update={
                     "rank": rank_i,
-                    "score": round(float(bandit_score), 4),
+                    "score": round(bounded_score, 4),
+                    "bandit_score": round(float(bandit_score), 4),
                 }))
 
             if len(reranked_items) == len(response.recommendations):

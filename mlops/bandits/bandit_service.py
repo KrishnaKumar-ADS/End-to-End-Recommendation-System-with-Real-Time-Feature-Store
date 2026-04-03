@@ -96,10 +96,20 @@ class BanditService:
         Keep it fast. No Redis reads here — arms are in-memory.
         """
         if not self._initialized:
-            # Graceful degradation: return original order if bandit not ready
-            logger.warning("BanditService not initialized — returning original order")
-            return [(i, float(len(candidate_item_ids) - j))
-                    for j, i in enumerate(candidate_item_ids)]
+            # Graceful degradation: preserve base ranker scores when bandit is unavailable.
+            logger.warning("BanditService not initialized — returning base ranking scores")
+
+            if lgbm_scores is not None and len(lgbm_scores) == len(candidate_item_ids):
+                return [
+                    (int(item_id), float(score))
+                    for item_id, score in zip(candidate_item_ids, lgbm_scores)
+                ]
+
+            total = max(len(candidate_item_ids), 1)
+            return [
+                (int(item_id), float(total - rank_idx) / float(total))
+                for rank_idx, item_id in enumerate(candidate_item_ids)
+            ]
 
         return self.bandit.rerank(
             candidate_item_ids=candidate_item_ids,
