@@ -27,7 +27,7 @@ The goal is to demonstrate a complete recommender lifecycle from raw interaction
 ## Live Demo
 
 - Hugging Face Space: https://huggingface.co/spaces/krishnakumar19/ds19-recommender-api
-- Direct App URL: https://krishnakumar19-ds19-recommender-api.hf.space
+- Hugging face repository: https://huggingface.co/spaces/krishnakumar19/ds19-recommender-api/tree/main
 
 ## 1) Project Objective
 
