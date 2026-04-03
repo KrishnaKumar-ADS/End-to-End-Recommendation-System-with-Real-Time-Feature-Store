@@ -24,6 +24,11 @@ The project combines:
 
 The goal is to demonstrate a complete recommender lifecycle from raw interactions to online inference, feedback capture, and monitoring.
 
+## Live Demo
+
+- Hugging Face Space: https://huggingface.co/spaces/krishnakumar19/ds19-recommender-api
+- Direct App URL: https://krishnakumar19-ds19-recommender-api.hf.space
+
 ## 1) Project Objective
 
 This project solves a practical recommendation problem:
