@@ -8,7 +8,7 @@ app_port: 7860
 pinned: false
 ---
 
-#Production-Style Movie Recommendation System
+# Production-Style Movie Recommendation System
 
 This is an end-to-end recommendation platform built around a hybrid retrieval + ranking architecture and deployed as a fullstack application.
 
