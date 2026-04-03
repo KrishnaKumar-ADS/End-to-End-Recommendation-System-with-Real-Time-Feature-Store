@@ -1,0 +1,12 @@
+{
+  "n_items": 19935,
+  "embed_dim": 64,
+  "index_type": "FlatIP",
+  "nlist": null,
+  "nprobe": null,
+  "metric": "inner_product",
+  "normalized": true,
+  "model_checkpoint": "two_tower_best.pt",
+  "item_ids_start": 1,
+  "item_ids_end": 19935
+}

@@ -1,0 +1,40 @@
+global:
+  # How often Prometheus scrapes targets.
+  # 15s is standard for production. Lower = more data, more CPU.
+  scrape_interval: 15s
+
+  # How often Prometheus evaluates alert rules.
+  evaluation_interval: 15s
+
+  # Labels added to all time series from this Prometheus instance.
+  # Useful when federating multiple Prometheus instances.
+  external_labels:
+    environment: "development"
+    project: "ds19"
+
+# ── ALERT RULES FILES ───────────────────────────────────────────────
+rule_files:
+  - "alerts.yml"
+
+# ── SCRAPE TARGETS ──────────────────────────────────────────────────
+scrape_configs:
+
+  # Target 1: Prometheus itself (self-monitoring)
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Target 2: DS19 FastAPI Application
+  # FastAPI exposes /metrics at port 8000 (via Instrumentator)
+  - job_name: "ds19_fastapi"
+    scrape_interval: 10s          # More frequent for the main app
+    scrape_timeout: 5s
+    metrics_path: "/metrics"      # Our Instrumentator endpoint
+    static_configs:
+      - targets: ["app:8000"]     # "app" = Docker service name
+        labels:
+          service: "fastapi"
+          version: "9.0"
+
+  # In docker-compose, use service names as hostnames.
+  # Running locally (not Docker): change "app:8000" to "localhost:8000"

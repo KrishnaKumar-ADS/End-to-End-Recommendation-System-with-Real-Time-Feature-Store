@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    orgId: 1
+    url: http://prometheus:9090   # "prometheus" = Docker service name
+    basicAuth: false
+    isDefault: true
+    version: 1
+    editable: false               # Prevent accidental UI changes
+    jsonData:
+      timeInterval: "15s"         # Match Prometheus scrape interval
+      httpMethod: POST            # POST is more efficient for range queries

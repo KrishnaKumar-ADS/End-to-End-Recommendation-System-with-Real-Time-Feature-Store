@@ -1,0 +1,6 @@
+-r requirements.txt
+
+# Local development and testing helpers
+pytest==9.0.2
+ipykernel==6.29.5
+jupyterlab==4.4.4

@@ -1,0 +1,142 @@
+version: "3.9"
+
+services:
+
+  # ----------------------------------------------------------------
+  # REDIS - Online store for Feast + Bandit state
+  # ----------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: ds19_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      --save 60 1000
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - ds19_network
+
+  # ----------------------------------------------------------------
+  # MLFLOW - Experiment tracking server + Model Registry UI
+  # ----------------------------------------------------------------
+  mlflow:
+    image: python:3.10-slim
+    container_name: ds19_mlflow
+    ports:
+      - "5000:5000"
+    volumes:
+      - mlflow_data:/mlflow
+    command: >
+      bash -c "
+      pip install mlflow --quiet &&
+      mlflow server
+        --backend-store-uri sqlite:////mlflow/mlflow.db
+        --default-artifact-root /mlflow/artifacts
+        --host 0.0.0.0
+        --port 5000
+        --workers 2
+      "
+    environment:
+      - MLFLOW_TRACKING_URI=sqlite:////mlflow/mlflow.db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - ds19_network
+
+  # ----------------------------------------------------------------
+  # APP - FastAPI Recommendation Service
+  # ----------------------------------------------------------------
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: ds19_app
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount model weights (avoid rebuilding image for every retrain)
+      - ./models/saved:/app/models/saved:ro
+      - ./retrieval:/app/retrieval:ro
+      # Mount Feast feature store config and data
+      - ./feature_store:/app/feature_store:ro
+      # Mount MLflow data (shared with mlflow service)
+      - mlflow_data:/app/mlops/experiments
+      # Mount A/B testing logs (writable)
+      - ab_logs:/app/mlops/ab_testing
+      # Mount processed data
+      - ./data/processed:/app/data/processed:ro
+      - ./data/raw/movies.csv:/app/data/raw/movies.csv:ro
+    environment:
+      # Redis connection (use service name "redis" as hostname in Docker network)
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      # MLflow tracking
+      - MLFLOW_TRACKING_URI=sqlite:////app/mlops/experiments/mlflow.db
+      # Feast config
+      - FEAST_REPO_PATH=/app/feature_store/feature_repo
+      # App config
+      - HOST=0.0.0.0
+      - PORT=8000
+      - WORKERS=1
+      - LOG_LEVEL=info
+      # Bandit config
+      - BANDIT_BLEND_WEIGHT=0.3
+      # A/B test config
+      - AB_EXPERIMENT_ID=retrieval_v1
+    depends_on:
+      redis:
+        condition: service_healthy
+      mlflow:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 90s
+    restart: unless-stopped
+    networks:
+      - ds19_network
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: "2.0"
+
+# ----------------------------------------------------------------
+# NETWORKS
+# ----------------------------------------------------------------
+networks:
+  ds19_network:
+    driver: bridge
+    name: ds19_network
+
+# ----------------------------------------------------------------
+# VOLUMES (named, managed by Docker - persists across restarts)
+# ----------------------------------------------------------------
+volumes:
+  redis_data:
+    name: ds19_redis_data
+  mlflow_data:
+    name: ds19_mlflow_data
+  ab_logs:
+    name: ds19_ab_logs

@@ -1,0 +1,65 @@
+# VCS
+.git
+.gitignore
+.gitattributes
+
+# Editor and env files
+.vscode/
+.idea/
+.env
+.env.*
+
+# Python cache
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Local virtual envs
+venv/
+.venv/
+
+# Local artifacts and reports
+mlruns/
+logs/
+notebooks/
+WEEK_VISE/
+
+# Not needed for backend Space runtime
+tests/
+load_testing/
+monitoring/
+nginx/
+Docker/
+frontend/node_modules/
+frontend/dist/
+
+# Prune dataset/training assets - keep inference minimum
+data/processed/*
+!data/processed/item2idx.json
+!data/processed/idx2item.json
+!data/processed/dataset_meta.json
+!data/processed/user2idx.json
+
+data/features/*
+!data/features/user_features.parquet
+!data/features/item_features.parquet
+
+data/sequences/*
+!data/sequences/sequences.pkl
+
+data/raw/*
+!data/raw/movies.csv
+
+data/events/
+data/splits/
+
+# Keep only required model artifacts for inference
+models/saved/*
+!models/saved/two_tower_best.pt
+!models/saved/lgbm_ranker.pkl
+models/matrix_factorization/
+models/ranking/
+models/transformer/

@@ -1,0 +1,32 @@
+# DS19 — Backend-Specific Dependencies
+# These are on top of the root requirements.txt
+
+# Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Schema Validation
+pydantic
+
+# HTTP Client (for integration tests)
+httpx==0.25.2
+
+# Logging
+loguru==0.7.2
+
+# Cache
+redis==5.0.1
+
+# Python utilities
+python-dotenv==1.0.0
+
+# Data
+pandas
+numpy
+pyarrow   # for parquet
+
+# ML (already in root requirements.txt, but listed here for clarity)
+# torch==2.1.2
+# lightgbm==4.1.0
+# faiss-cpu==1.7.4

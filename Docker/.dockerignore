@@ -1,0 +1,59 @@
+# Version control
+.git
+.gitignore
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info
+dist
+build
+
+# Virtual environments
+venv
+env
+.env
+.venv
+
+# ML artifacts (large files — mount as volumes in production)
+data/raw/*.csv
+
+# MLflow database (use volume mount in docker-compose)
+mlops/experiments/mlflow.db
+mlops/experiments/artifacts/
+
+# Development files
+*.ipynb
+.jupyter
+notebooks/
+
+# Test files (not needed in production image)
+tests/
+
+# IDE files
+.vscode
+.idea
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs (use volumes or log aggregation in production)
+logs/
+*.log
+
+# GitHub Actions
+.github/
+
+# Documentation
+README.md
+docs/
+
+# Docker files (don't copy into the image)
+Dockerfile
+docker-compose*.yml
+.dockerignore

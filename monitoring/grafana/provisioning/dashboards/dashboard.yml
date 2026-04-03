@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  - name: "DS19 Dashboards"
+    orgId: 1
+    folder: "DS19"
+    type: file
+    disableDeletion: false
+    editable: true
+    updateIntervalSeconds: 30
+    options:
+      path: /etc/grafana/dashboards

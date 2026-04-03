@@ -1,0 +1,19 @@
+{
+  "n_users_simulated": 2000,
+  "total_impressions": 20000,
+  "total_clicks": 1203,
+  "simulated_ctr": 0.0602,
+  "avg_session_ctr": 0.0601,
+  "arms_created": 12689,
+  "bandit_stats": {
+    "total_arms": 12689,
+    "catalog_coverage": "12689/19935 (63.7%)",
+    "total_trials": 180000,
+    "avg_trials_per_arm": 14.18551501300339,
+    "max_trials": 54,
+    "avg_expected_ctr": 0.12311030150668896,
+    "max_expected_ctr": 0.95,
+    "min_expected_ctr": 0.017857142857142856,
+    "arms_with_10+_trials": 5274
+  }
+}

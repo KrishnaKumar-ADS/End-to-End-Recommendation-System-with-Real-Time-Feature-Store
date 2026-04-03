@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+*.so
+
+# Environments
+.env
+.venv/
+venv/
+backend/venv/
+frontend/node_modules/
+frontend/dist/
+WEEK_VISE/
+
+# Local editor/workspace
+.vscode/
+.idea/
+.pytest_cache/
+# Data (large files)
+data/raw/*.csv
+data/raw/*.zip
+data/raw/
+data/processed/
+data/sequences/
+data/events/
+data/splits/
+*.parquet
+*.npy
+*.zip
+
+# Models (large files)
+models/saved/*.pt
+models/saved/*.pkl
+models/saved/
+*.index
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+logs/
+*.log
+*.jsonl
+
+# MLflow
+mlruns/
+mlops/experiments/*.db
+mlops/reports/*.json
+
+# Generated feature/data artifacts
+data/features/*.pkl
+feature_store/feature_repo/registry.db
+
+# Weekly milestone artifacts (do not push)
+WEEK_VISE/
+**/[Ww][Ee][Ee][Kk]*/
+**/[Ww][Ee][Ee][Kk]*
+
+# Non-essential empty placeholder logs
+feature_store/feature_repo/mlops/ab_testing/conversions.jsonl
+feature_store/feature_repo/mlops/ab_testing/exposures.jsonl

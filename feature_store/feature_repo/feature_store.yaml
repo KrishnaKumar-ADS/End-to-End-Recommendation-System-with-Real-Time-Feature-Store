@@ -1,0 +1,10 @@
+project: ds19_recommender
+provider: local
+registry: registry.db        # SQLite registry file (auto-created by 'feast apply')
+online_store:
+  type: redis
+  connection_string: "localhost:6379"   # Redis host:port
+  # Optional Redis password: add 'password: yourpassword' if Redis is password-protected
+offline_store:
+  type: file                  # Local Parquet files (no cloud needed)
+entity_key_serialization_version: 3

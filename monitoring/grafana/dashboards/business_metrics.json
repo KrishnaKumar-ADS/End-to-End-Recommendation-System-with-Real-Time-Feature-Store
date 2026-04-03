@@ -1,0 +1,164 @@
+{
+    "description": "DS19 — Business Metrics: CTR, bandit exploration, diversity, A/B status",
+    "editable": true,
+    "panels": [
+        {
+            "id": 1,
+            "title": "🎰 Bandit Arm Selections — Exploration vs Exploitation",
+            "type": "piechart",
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 0,
+                "y": 0
+            },
+            "datasource": "Prometheus",
+            "options": {
+                "pieType": "donut",
+                "legend": {
+                    "displayMode": "table",
+                    "placement": "right"
+                }
+            },
+            "targets": [
+                {
+                    "expr": "increase(ds19_bandit_arm_selections_total[24h])",
+                    "legendFormat": "{{item_bucket}}",
+                    "refId": "A"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "title": "👍 User Feedback — Positive vs Negative by Variant",
+            "type": "bargauge",
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 8,
+                "y": 0
+            },
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short"
+                }
+            },
+            "options": {
+                "orientation": "vertical",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ]
+                }
+            },
+            "targets": [
+                {
+                    "expr": "increase(ds19_feedback_events_total[24h])",
+                    "legendFormat": "{{variant}} — {{feedback_type}}",
+                    "refId": "A"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "title": "🎭 Recommendation Genre Diversity (avg unique genres / response)",
+            "type": "timeseries",
+            "gridPos": {
+                "h": 8,
+                "w": 8,
+                "x": 16,
+                "y": 0
+            },
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "min": 0,
+                    "max": 10
+                }
+            },
+            "targets": [
+                {
+                    "expr": "histogram_quantile(0.50, rate(ds19_recommendation_genre_diversity_bucket[5m]))",
+                    "legendFormat": "Median diversity — {{variant}}",
+                    "refId": "A"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "title": "🧪 Active A/B Experiments",
+            "type": "stat",
+            "gridPos": {
+                "h": 4,
+                "w": 4,
+                "x": 0,
+                "y": 8
+            },
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "short",
+                    "thresholds": {
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "yellow",
+                                "value": 3
+                            }
+                        ]
+                    }
+                }
+            },
+            "targets": [
+                {
+                    "expr": "ds19_active_ab_experiments",
+                    "legendFormat": "Active Experiments",
+                    "refId": "A"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "title": "📦 Feature Store Latency (Feast → Redis) P95",
+            "type": "timeseries",
+            "gridPos": {
+                "h": 4,
+                "w": 8,
+                "x": 4,
+                "y": 8
+            },
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "s"
+                }
+            },
+            "targets": [
+                {
+                    "expr": "histogram_quantile(0.95, rate(ds19_feature_store_latency_seconds_bucket[5m]))",
+                    "legendFormat": "{{feature_view}} P95",
+                    "refId": "A"
+                }
+            ]
+        }
+    ],
+    "refresh": "30s",
+    "schemaVersion": 38,
+    "tags": [
+        "ds19",
+        "business",
+        "bandits"
+    ],
+    "time": {
+        "from": "now-6h",
+        "to": "now"
+    },
+    "title": "DS19 — Business Metrics",
+    "uid": "ds19-business",
+    "version": 1
+}

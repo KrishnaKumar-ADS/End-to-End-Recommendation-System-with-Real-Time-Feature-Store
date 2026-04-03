@@ -1,0 +1,93 @@
+# DS19 — Prometheus Alert Rules
+# These fire when your system is unhealthy.
+# Grafana can display and route these alerts.
+
+groups:
+
+  - name: ds19_latency_alerts
+    rules:
+
+      # Alert 1: P95 recommendation latency > 200ms sustained for 5 min
+      - alert: RecommendationLatencyHigh
+        expr: |
+          histogram_quantile(
+            0.95,
+            rate(ds19_recommendation_latency_seconds_bucket[5m])
+          ) > 0.2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Recommendation P95 latency is above 200ms"
+          description: >
+            P95 latency is {{ $value | humanizeDuration }}.
+            This means 5% of users are waiting > 200ms.
+            Check: Feature store latency, FAISS query time, LightGBM inference.
+
+      # Alert 2: P99 recommendation latency > 1 second
+      - alert: RecommendationLatencyCritical
+        expr: |
+          histogram_quantile(
+            0.99,
+            rate(ds19_recommendation_latency_seconds_bucket[5m])
+          ) > 1.0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Recommendation P99 latency CRITICAL (>1s)"
+          description: >
+            1% of users are experiencing >1s latency.
+            Immediate investigation required.
+
+  - name: ds19_error_alerts
+    rules:
+
+      # Alert 3: HTTP 5xx error rate > 5% over 5 minutes
+      - alert: HighErrorRate
+        expr: |
+          rate(
+            http_requests_total{status=~"5.."}[5m]
+          )
+          /
+          rate(
+            http_requests_total[5m]
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Error rate above 5%"
+          description: >
+            {{ $value | humanizePercentage }} of requests are returning 5xx.
+            Check application logs: docker logs ds19_app.
+
+      # Alert 4: Zero recommendations being served (complete outage)
+      - alert: NoRecommendationsServed
+        expr: |
+          rate(ds19_recommendation_requests_total[5m]) == 0
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "No recommendations served for 3+ minutes"
+          description: >
+            The recommendation endpoint has had zero successful requests
+            for 3+ minutes. Service may be down.
+            Check: docker-compose ps
+
+  - name: ds19_cache_alerts
+    rules:
+
+      # Alert 5: Cache hit ratio drops below 20% (Redis problem?)
+      - alert: LowCacheHitRatio
+        expr: ds19_cache_hit_ratio < 0.2
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Cache hit ratio dropped below 20%"
+          description: >
+            Cache hit ratio is {{ $value | humanizePercentage }}.
+            This increases latency significantly.
+            Check Redis connection: redis-cli ping

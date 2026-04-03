@@ -1,0 +1,49 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: "DS19 Slack Alerts"
+    receivers:
+      - uid: "slack-ml-alerts"
+        type: slack
+        settings:
+          # The Slack webhook URL.
+          # In production: use Grafana's secret store or env var substitution.
+          url: "${SLACK_WEBHOOK_URL}"
+
+          # Slack channel to post to. Must include the #.
+          recipient: "#ml-alerts"
+
+          # Who the message appears to be from
+          username: "DS19 Monitor"
+
+          # Emoji icon for the bot
+          icon_emoji: ":robot_face:"
+
+          # Message title template.
+          # {{ .CommonAnnotations.summary }} comes from your alerts.yml.
+          title: |
+            {{ if eq .Status "firing" }}🚨 ALERT{{ else }}✅ RESOLVED{{ end }}: {{ .CommonAnnotations.summary }}
+
+          # Message body template.
+          # Rich formatting with details about what triggered the alert.
+          text: |
+            *Status:* {{ .Status | toUpper }}
+            *Alert:* {{ .CommonAnnotations.summary }}
+            *Details:* {{ .CommonAnnotations.description }}
+
+            *Severity:* {{ .CommonLabels.severity }}
+            *Started:* {{ .StartsAt | since }}
+
+            {{ if eq .Status "firing" }}
+            *Action Required:*
+            1. Check Grafana: http://localhost:3000
+            2. Check FastAPI logs: `docker logs ds19_app --tail 100`
+            3. Check Redis: `redis-cli ping`
+            {{ end }}
+
+          # Whether to mention @here for critical alerts
+          # Only fires for critical severity
+          mention_here: false
+
+        disableResolveMessage: false
