@@ -1,5 +1,5 @@
 ---
-title: DS19 Recommender API
+title: Recommender API
 emoji: 🤖
 colorFrom: blue
 colorTo: indigo
@@ -8,9 +8,9 @@ app_port: 7860
 pinned: false
 ---
 
-# DS19: Production-Style Movie Recommendation System
+#Production-Style Movie Recommendation System
 
-DS19 is an end-to-end recommendation platform built around a hybrid retrieval + ranking architecture and deployed as a fullstack application.
+This is an end-to-end recommendation platform built around a hybrid retrieval + ranking architecture and deployed as a fullstack application.
 
 The project combines:
 
