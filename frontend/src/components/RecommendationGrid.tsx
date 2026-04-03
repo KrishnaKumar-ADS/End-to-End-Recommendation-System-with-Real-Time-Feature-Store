@@ -13,6 +13,10 @@ export default function RecommendationGrid({ data }: Props) {
   const feedbackMutation = useFeedback();
   const isMovieSeeded = data.source_type === "movie";
   const feedbackEnabled = !isMovieSeeded && data.user_id > 0;
+  const topScore = Math.max(
+    1e-8,
+    ...data.recommendations.map((movie) => Number(movie.score) || 0)
+  );
 
   const handleFeedback = async (itemId: number, reward: 0 | 1) => {
     if (!feedbackEnabled) return;
@@ -58,6 +62,7 @@ export default function RecommendationGrid({ data }: Props) {
             key={movie.item_id}
             movie={movie}
             rank={index + 1}
+            topScore={topScore}
             userId={data.user_id}
             variant={data.variant}
             onFeedback={feedbackEnabled ? handleFeedback : undefined}
