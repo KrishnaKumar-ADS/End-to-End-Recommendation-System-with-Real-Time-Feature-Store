@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.env
+.env.prod
+.coverage
+.coverage.*
+
+# Data (cloned repos and processed cache)
+data/raw/
+data/processed/
+
+# Node
+node_modules/
+.next/
+frontend/.env.local
+
+# Docker
+docker-compose.override.yml
+docker/nginx/certs/*.key
+docker/nginx/certs/*.crt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

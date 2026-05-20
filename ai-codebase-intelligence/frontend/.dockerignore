@@ -1,0 +1,32 @@
+# Node modules and build artifacts
+node_modules/
+.next/
+out/
+
+# Test files and coverage
+coverage/
+.nyc_output/
+__tests__/
+tests/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+vitest.config.ts
+vitest.setup.ts
+
+# Local env files
+.env.local
+.env.development
+.env.development.local
+
+# VCS and editor
+.git/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
