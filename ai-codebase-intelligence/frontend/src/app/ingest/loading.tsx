@@ -1,0 +1,17 @@
+import { Card } from "@/components/ui/Card";
+import { Skeleton } from "@/components/ui/Skeleton";
+
+export default function Loading() {
+  return (
+    <div className="space-y-6">
+      <Card padding="lg">
+        <Skeleton className="h-8 w-56" />
+        <Skeleton className="mt-4 h-28 w-full" />
+      </Card>
+      <Card padding="lg">
+        <Skeleton className="h-6 w-48" />
+        <Skeleton className="mt-4 h-20 w-full" />
+      </Card>
+    </div>
+  );
+}

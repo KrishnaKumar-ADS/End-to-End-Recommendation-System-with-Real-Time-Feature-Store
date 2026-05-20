@@ -1,0 +1,48 @@
+# ── API Framework ─────────────────────────────────────────
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+pydantic==2.7.0
+pydantic-settings==2.3.0
+python-dotenv==1.0.1
+
+# ── Database ──────────────────────────────────────────────
+sqlalchemy[asyncio]==2.0.30
+asyncpg==0.29.0
+psycopg2-binary==2.9.11
+alembic==1.13.1
+
+# ── Task Queue ────────────────────────────────────────────
+celery==5.4.0
+redis==5.0.7
+
+# ── Repository Ingestion ─────────────────────────────────
+gitpython==3.1.43
+
+# ── LLM Providers ─────────────────────────────────────────
+google-generativeai==0.8.3
+openai==1.35.0
+httpx==0.27.0
+
+# ── LLM Streaming + Token Counting ────────────────────────
+sse-starlette==2.1.0
+tiktoken==0.7.0
+
+# ── Hybrid Search ─────────────────────────────────────────
+rank-bm25==0.2.2
+
+# ── Utilities ─────────────────────────────────────────────
+tenacity==8.3.0
+structlog==24.2.0
+python-multipart==0.0.9
+
+# ── Code Parsing ──────────────────────────────────────────
+tree-sitter==0.21.3
+tree-sitter-python==0.21.0
+tree-sitter-javascript==0.21.4
+tree-sitter-typescript==0.21.2
+tree-sitter-go==0.21.2
+tree-sitter-java==0.21.0
+
+# ── Vector / Graph ────────────────────────────────────────
+qdrant-client==1.15.1
+neo4j==5.20.0

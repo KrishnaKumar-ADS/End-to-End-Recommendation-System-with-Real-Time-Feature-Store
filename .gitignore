@@ -63,4 +63,6 @@ WEEK_VISE/
 
 # Non-essential empty placeholder logs
 feature_store/feature_repo/mlops/ab_testing/conversions.jsonl
-feature_store/feature_repo/mlops/ab_testing/exposures.jsonl
+feature_store/feature_repo/mlops/ab_testing/exposures.jsonlai-codebase-intelligence/backend/venv/
+ai-codebase-intelligence/frontend/node_modules/
+ai-codebase-intelligence/frontend/.next/
